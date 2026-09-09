@@ -1,0 +1,7 @@
+{
+  "defaultViewMode": "preview",
+  "livePreview": true,
+  "userIgnoreFilters": ["재료/", "발행/", ".git/"],
+  "attachmentFolderPath": "재료",
+  "alwaysUpdateLinks": true
+}

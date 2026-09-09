@@ -1,0 +1,59 @@
+# 문 앞의 검사 — 통과 못 하면 main에 합쳐지지 않는다.
+# 이 커리큘럼은 원고(마크다운)와 발행 스크립트(파이썬)로 되어 있어 검사도 그 둘을 본다.
+name: 문지기
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  verify:            # ⚠️ 작업 아이디에는 한글을 못 쓴다. 보이는 이름만 한글로.
+    name: 검사
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 발행이 되나
+        run: python3 발행/build.py
+
+      - name: 절마다 필수 칸이 있나
+        run: |
+          python3 - <<'PY'
+          import glob, os, sys
+          bad = []
+          for fp in sorted(glob.glob('원고/*/*.md')):
+              if os.path.basename(fp).startswith('_'):
+                  continue
+              t = open(fp, encoding='utf-8').read()
+              miss = [k for k in ('## 왜 이걸 하나', '## ⚡ 이렇게 하세요', '## ✅ 됐는지 확인') if k not in t]
+              if miss:
+                  bad.append(f'{fp} — 없음: {", ".join(miss)}')
+          if bad:
+              print('\n'.join(bad)); sys.exit(1)
+          print('절 파일 전부 통과')
+          PY
+
+      - name: 코드블록 짝이 맞나
+        run: |
+          python3 - <<'PY'
+          import glob, sys
+          bad = [fp for fp in sorted(glob.glob('원고/*/*.md'))
+                 if sum(1 for ln in open(fp, encoding='utf-8') if ln.lstrip().startswith('```')) % 2]
+          if bad:
+              print('코드블록이 안 닫힘:', *bad, sep='\n'); sys.exit(1)
+          print('코드블록 전부 짝이 맞음')
+          PY
+
+      - name: 비밀값이 섞이지 않았나
+        run: |
+          if git ls-files | grep -iE '\.env$|(^|/)(token|secret|credential)|\.key$|\.pem$'; then
+            echo "❌ 올리면 안 되는 파일이 있습니다"; exit 1
+          fi
+          echo "비밀값 없음"

@@ -1,0 +1,13 @@
+.DS_Store
+.obsidian/workspace*
+.obsidian/cache
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+
+# 공개 저장소에 올리지 않는 것 — 보관용 저장소(vibe-master-v2-archive)에 있다
+# ⚠️ 주석은 반드시 딴 줄에. 패턴 옆에 쓰면 주석이 아니라 패턴의 일부가 된다
+재료/
+작업표.md
