@@ -219,7 +219,8 @@ code,pre,kbd{font-family:var(--mono)}
 .scard .bar{height:3px;background:var(--s3);border-radius:99px;overflow:hidden;flex:1;margin-right:12px}
 .scard .bar i{display:block;height:100%;background:var(--sc);width:var(--p,0%)}
 .scard.done h3{color:var(--mute)}
-.band{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;margin:26px 0 2px;color:var(--fg2);font-size:15px;font-weight:700;letter-spacing:-.01em}
+.band{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:30px 0 2px;color:var(--fg2);font-size:14px;font-weight:700;letter-spacing:-.01em}
+.band i{width:22px;height:2px;background:var(--bc,var(--line));border-radius:99px;flex:none}
 .band small{font-weight:500;color:var(--faint);font-size:12px}
 .band::after{content:"";flex:1;height:1px;background:var(--line);align-self:center}
 
@@ -291,14 +292,33 @@ code,pre,kbd{font-family:var(--mono)}
 pre:hover .copy,.copy:focus{opacity:1}
 
 /* 다섯 칸 — v1의 callout 어법: 옅게 물든 상자와 작은 라벨 */
-.call{margin:1.8em 0;padding:16px 18px;border-radius:12px;border:1px solid color-mix(in srgb,var(--kc) 28%,transparent);
+.call{margin:26px 0;padding:16px 18px;border-radius:12px;border:1px solid color-mix(in srgb,var(--kc) 28%,transparent);
   background:color-mix(in srgb,var(--kc) 7%,transparent);scroll-margin-top:72px}
-.call>b{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--kc);margin-bottom:8px;font-weight:700}
+.call>b{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--kc);margin-bottom:10px;font-weight:700}
+/* ⚡ 따라 하기 — 실행 칸이라 가장 눈에 띄게. 머리에 색 띠 */
+.call.k-zap{padding:0;overflow:hidden;border-width:1.5px;background:var(--s1)}
+.call.k-zap>b{background:color-mix(in srgb,var(--kc) 16%,transparent);margin:0;padding:11px 18px;
+  border-bottom:1px solid color-mix(in srgb,var(--kc) 24%,transparent);font-size:13px}
+.call.k-zap>.body{padding:14px 18px 16px}
+/* ✅ 확인 — 체크리스트 카드 */
+.call.k-ok{background:var(--s1);border-width:1.5px}
+.call.k-ok .body ul{list-style:none;padding-left:0}
+.call.k-ok .body li{position:relative;padding-left:30px;margin:.6em 0}
+.call.k-ok .body li::before{content:"";position:absolute;left:0;top:.32em;width:16px;height:16px;
+  border:1.5px solid color-mix(in srgb,var(--kc) 60%,transparent);border-radius:4px}
+/* ⚠️ 함정 — 왼쪽 굵은 띠 */
+.call.k-trap{border-left-width:4px;border-radius:4px 12px 12px 4px;background:color-mix(in srgb,var(--kc) 9%,transparent)}
+/* 📘 말 풀이 — 사전처럼 조용하게 */
+.call.k-say{background:transparent;border-style:dashed}
+.call.k-say .body p{margin:.55em 0}
+.call.k-say .body strong{color:var(--kc);font-weight:700}
+/* 🔎 더 깊이 — 가장 조용하게 */
+.call.k-deep{background:transparent;border-style:dotted;border-color:var(--line)}
+.call.k-deep>b{color:var(--mute)}
+.call.k-deep .body{color:var(--dim);font-size:14.5px}
 .call>b svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .call .body p:first-child{margin-top:0}.call .body p:last-child{margin-bottom:0}
 .k-say{--kc:#7dd3fc}.k-trap{--kc:#fb923c}.k-zap{--kc:#34d399}.k-ok{--kc:#fbbf24}.k-deep{--kc:#c4b5fd}
-.call.k-ok .body li{list-style:none;margin-left:-1.3em;padding-left:1.6em;position:relative}
-.call.k-ok .body li::before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;border:1.5px solid var(--kc);border-radius:3px;opacity:.7}
 
 /* 학습 틀 — 목표·순서·단계 */
 .goals{margin:0 0 18px;padding:16px 18px 16px 20px;border-radius:12px;background:color-mix(in srgb,var(--c) 9%,transparent);border:1px solid color-mix(in srgb,var(--c) 30%,transparent)}
@@ -310,22 +330,18 @@ pre:hover .copy,.copy:focus{opacity:1}
 .steps a i{width:18px;height:18px;border-radius:50%;background:var(--c);color:#0a0d13;font:700 11px var(--mono);display:inline-flex;align-items:center;justify-content:center;font-style:normal}
 .steps a:hover{border-color:var(--c)}
 .steps .arr{color:var(--faint);font-size:11px}
-.step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;margin:34px 0 0;padding-top:24px;border-top:1px solid var(--line);scroll-margin-top:72px}
-.step:first-of-type{border-top:0;padding-top:0;margin-top:8px}
-.step .n{width:36px;height:36px;border-radius:10px;background:var(--c);color:#0a0d13;font:900 16px var(--mono);display:flex;align-items:center;justify-content:center}
-.step h2{margin:4px 0 8px!important;font-size:19px}
+.step{display:grid;grid-template-columns:40px minmax(0,1fr);gap:16px;margin:0;padding:26px 0 4px;position:relative;scroll-margin-top:72px}
+.step::before{content:"";position:absolute;left:19px;top:0;bottom:0;width:2px;background:var(--line)}
+.step:first-of-type::before{top:34px}
+.step:last-of-type::before{bottom:auto;height:34px}
+.step .n{width:40px;height:40px;border-radius:50%;background:var(--bg);border:2px solid var(--c);color:var(--c);
+  font:700 15px var(--mono);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.step h2{margin:6px 0 10px!important;font-size:19px;color:var(--fg)}
+.step .body{padding-bottom:6px}
 /* 칸마다 다른 형태 */
-.call.k-say{background:var(--s1);border-style:dashed}
-.call.k-say .body p{margin:.5em 0}
-.call.k-say .body strong{color:var(--kc)}
-.call.k-trap{border-left:4px solid var(--kc);border-radius:6px 12px 12px 6px}
-.call.k-zap{background:color-mix(in srgb,var(--kc) 10%,transparent);border-width:1.5px}
 .call.k-zap .body ol{counter-reset:z;list-style:none;padding-left:0}
 .call.k-zap .body ol>li{counter-increment:z;position:relative;padding-left:2em;margin:.7em 0}
-.call.k-zap .body ol>li::before{content:counter(z);position:absolute;left:0;top:.15em;width:1.4em;height:1.4em;border-radius:6px;background:var(--kc);color:#0a0d13;font:700 11px var(--mono);display:flex;align-items:center;justify-content:center}
-.call.k-ok{background:transparent;border-width:1.5px}
-.call.k-deep{background:transparent;border-style:dotted}
-.call.k-deep>b{color:var(--mute)}
+.call.k-zap .body ol>li::before{content:counter(z);position:absolute;left:0;top:.18em;width:1.5em;height:1.5em;border-radius:7px;background:var(--kc);color:#0a0d13;font:700 11px var(--mono);display:flex;align-items:center;justify-content:center}
 
 .foot{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .btn{font-size:13px;padding:9px 15px;border:1px solid var(--line);border-radius:8px;background:var(--s2);color:var(--fg2);cursor:pointer;line-height:1.3}
@@ -433,7 +449,7 @@ mark{background:rgba(251,191,36,.28);color:inherit;padding:0 2px;border-radius:2
       '<p>직장인·비개발자를 위한 14장. 앞 장에서 만든 것이 뒤 장의 재료가 됩니다. 순서대로 가는 것이 가장 빠르지만, 막히면 어디로든 건너뛰어도 됩니다 — 모든 절이 서로 이어져 있습니다.</p>' +
       '<div class="prog"><b>' + done + '</b> / ' + all + ' 절 읽음</div></section><div class="grid">';
     D.stages.forEach(function(st){
-      if (BANDS[st.key]) h += '<div class="band">' + esc(BANDS[st.key]) + '</div>';
+      if (BANDS[st.key]) h += '<div class="band" style="--bc:' + st.color + '"><i></i>' + esc(BANDS[st.key]) + '</div>';
       var c = counts(st), p = c[1] ? Math.round(c[0] / c[1] * 100) : 0;
       h += '<button class="scard' + (c[1] && c[0] === c[1] ? ' done' : '') + '" type="button" data-k="' + esc(st.key) + '" style="--sc:' + st.color + ';--p:' + p + '%">' +
            '<div class="num"><i></i>' + esc(tag(st)) + '</div><h3>' + esc(st.name) + '</h3>' +
