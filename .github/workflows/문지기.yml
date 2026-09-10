@@ -32,7 +32,11 @@ jobs:
               if os.path.basename(fp).startswith('_'):
                   continue
               t = open(fp, encoding='utf-8').read()
-              miss = [k for k in ('## 왜 이걸 하나', '## ⚡ 이렇게 하세요', '## ✅ 됐는지 확인') if k not in t]
+              # 새 틀: 번호 단계 ①… + ⚡ 따라 하기 + ✅ 확인 (옛 이름도 당분간 허용)
+              has_step = '## ①' in t
+              has_zap = ('## ⚡ 따라 하기' in t) or ('## ⚡ 이렇게 하세요' in t)
+              has_ok = ('## ✅ 확인' in t) or ('## ✅ 됐는지 확인' in t)
+              miss = [n for n, ok in (('① 단계', has_step), ('⚡ 따라 하기', has_zap), ('✅ 확인', has_ok)) if not ok]
               if miss:
                   bad.append(f'{fp} — 없음: {", ".join(miss)}')
           if bad:

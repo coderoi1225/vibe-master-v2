@@ -96,6 +96,8 @@ for folder, key, name, color in STAGES:
             'file': fname,
             'id': f"s{key.replace('.', '_')}-{len(sections) + 1}",
             'no': fm.get('순서', ''), 'title': fm.get('제목', os.path.splitext(fname)[0]),
+            'goals': fm.get('목표', []) if isinstance(fm.get('목표', []), list) else [fm.get('목표')],
+            'steps': fm.get('진행', []) if isinstance(fm.get('진행', []), list) else [fm.get('진행')],
             'through': fm.get('관통', ''), 'time': fm.get('소요', ''),
             'need': fm.get('준비물', []) if isinstance(fm.get('준비물', []), list) else [fm.get('준비물')],
             'head': head, 'secs': secs,
@@ -217,11 +219,15 @@ code,pre,kbd{font-family:var(--mono)}
 .scard .bar{height:3px;background:var(--s3);border-radius:99px;overflow:hidden;flex:1;margin-right:12px}
 .scard .bar i{display:block;height:100%;background:var(--sc);width:var(--p,0%)}
 .scard.done h3{color:var(--mute)}
-.band{grid-column:1/-1;display:flex;align-items:center;gap:12px;margin:18px 0 4px;color:var(--faint);font-size:12px;font-weight:700;letter-spacing:.02em}
-.band::after{content:"";flex:1;height:1px;background:var(--line)}
+.band{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;margin:26px 0 2px;color:var(--fg2);font-size:15px;font-weight:700;letter-spacing:-.01em}
+.band small{font-weight:500;color:var(--faint);font-size:12px}
+.band::after{content:"";flex:1;height:1px;background:var(--line);align-self:center}
 
 /* 장 */
-.shero{padding-bottom:30px;margin-bottom:28px;border-bottom:1px solid var(--line);max-width:52rem}
+.shero{position:relative;padding:28px 30px 30px;margin:0 0 28px;border-radius:16px;max-width:none;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--c) 16%,var(--s1)),var(--s1) 70%);border:1px solid color-mix(in srgb,var(--c) 30%,var(--line))}
+.shero::after{content:attr(data-n);position:absolute;right:26px;top:10px;font:900 84px/1 var(--mono);color:color-mix(in srgb,var(--c) 22%,transparent);letter-spacing:-.06em;pointer-events:none}
+@media(max-width:720px){.shero{padding:22px 18px}.shero::after{font-size:56px}}
 .crumbs{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--mute);margin-bottom:16px;flex-wrap:wrap}
 .crumbs button{background:none;border:0;color:var(--mute);cursor:pointer;padding:0;font-size:inherit}
 .crumbs button:hover{color:var(--fg)}
@@ -237,7 +243,8 @@ code,pre,kbd{font-family:var(--mono)}
 .ccard{display:flex;flex-direction:column;gap:8px;background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
   text-align:left;color:inherit;cursor:pointer;transition:border-color .15s}
 .ccard:hover{border-color:var(--c)}
-.ccard .no{font:600 11px var(--mono);color:var(--mute);display:flex;justify-content:space-between}
+.ccard .no{font:600 11px var(--mono);color:var(--mute);display:flex;justify-content:space-between;align-items:center}
+.ccard .no em{font-style:normal;display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;padding:0 7px;border-radius:6px;background:var(--c);color:#0a0d13;font-weight:700;margin-right:8px}
 .ccard .no .rd{color:var(--c)}
 .ccard h4{margin:0;font-size:16px;font-weight:700;letter-spacing:-.015em;line-height:1.4}
 .ccard p{margin:0;font-size:13.5px;line-height:1.65;color:var(--fg2)}
@@ -292,6 +299,33 @@ pre:hover .copy,.copy:focus{opacity:1}
 .k-say{--kc:#7dd3fc}.k-trap{--kc:#fb923c}.k-zap{--kc:#34d399}.k-ok{--kc:#fbbf24}.k-deep{--kc:#c4b5fd}
 .call.k-ok .body li{list-style:none;margin-left:-1.3em;padding-left:1.6em;position:relative}
 .call.k-ok .body li::before{content:"";position:absolute;left:0;top:.5em;width:12px;height:12px;border:1.5px solid var(--kc);border-radius:3px;opacity:.7}
+
+/* 학습 틀 — 목표·순서·단계 */
+.goals{margin:0 0 18px;padding:16px 18px 16px 20px;border-radius:12px;background:color-mix(in srgb,var(--c) 9%,transparent);border:1px solid color-mix(in srgb,var(--c) 30%,transparent)}
+.goals b{display:block;font-size:12px;color:var(--c);margin-bottom:8px}
+.goals ul{margin:0;padding-left:1.2em}
+.goals li{margin:.3em 0;font-size:15px}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 34px;align-items:center}
+.steps a{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--fg2);text-decoration:none;background:var(--s1);border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 6px}
+.steps a i{width:18px;height:18px;border-radius:50%;background:var(--c);color:#0a0d13;font:700 11px var(--mono);display:inline-flex;align-items:center;justify-content:center;font-style:normal}
+.steps a:hover{border-color:var(--c)}
+.steps .arr{color:var(--faint);font-size:11px}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;margin:34px 0 0;padding-top:24px;border-top:1px solid var(--line);scroll-margin-top:72px}
+.step:first-of-type{border-top:0;padding-top:0;margin-top:8px}
+.step .n{width:36px;height:36px;border-radius:10px;background:var(--c);color:#0a0d13;font:900 16px var(--mono);display:flex;align-items:center;justify-content:center}
+.step h2{margin:4px 0 8px!important;font-size:19px}
+/* 칸마다 다른 형태 */
+.call.k-say{background:var(--s1);border-style:dashed}
+.call.k-say .body p{margin:.5em 0}
+.call.k-say .body strong{color:var(--kc)}
+.call.k-trap{border-left:4px solid var(--kc);border-radius:6px 12px 12px 6px}
+.call.k-zap{background:color-mix(in srgb,var(--kc) 10%,transparent);border-width:1.5px}
+.call.k-zap .body ol{counter-reset:z;list-style:none;padding-left:0}
+.call.k-zap .body ol>li{counter-increment:z;position:relative;padding-left:2em;margin:.7em 0}
+.call.k-zap .body ol>li::before{content:counter(z);position:absolute;left:0;top:.15em;width:1.4em;height:1.4em;border-radius:6px;background:var(--kc);color:#0a0d13;font:700 11px var(--mono);display:flex;align-items:center;justify-content:center}
+.call.k-ok{background:transparent;border-width:1.5px}
+.call.k-deep{background:transparent;border-style:dotted}
+.call.k-deep>b{color:var(--mute)}
 
 .foot{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .btn{font-size:13px;padding:9px 15px;border:1px solid var(--line);border-radius:8px;background:var(--s2);color:var(--fg2);cursor:pointer;line-height:1.3}
@@ -356,8 +390,8 @@ mark{background:rgba(251,191,36,.28);color:inherit;padding:0 2px;border-radius:2
     if (t.indexOf('말 풀이') >= 0) return 'k-say';
     if (t.indexOf('함정') >= 0) return 'k-trap';
     if (t.indexOf('더 깊이') >= 0) return 'k-deep';
-    if (t.indexOf('이렇게 하세요') >= 0) return 'k-zap';
-    if (t.indexOf('됐는지') >= 0 || t.indexOf('자가 체크') >= 0) return 'k-ok';
+    if (t.indexOf('이렇게 하세요') >= 0 || t.indexOf('따라 하기') >= 0) return 'k-zap';
+    if (t.indexOf('됐는지') >= 0 || t.indexOf('자가 체크') >= 0 || /^[✅\s]*확인$/.test(t)) return 'k-ok';
     return '';
   }
   function label(t){ return t.replace(/^[📘⚠️⚡✅🔎\s]+/, '').trim(); }
@@ -414,7 +448,7 @@ mark{background:rgba(251,191,36,.28);color:inherit;padding:0 2px;border-radius:2
   function stageView(st){
     setColor(st.color);
     var c = counts(st), i = D.stages.indexOf(st), nx = D.stages[i + 1];
-    var h = '<div class="shero"><div class="crumbs"><button type="button" data-home="1">여정 지도</button><span>/</span><b>' + esc(full(st)) + '</b></div>' +
+    var h = '<div class="shero" data-n="' + esc(isNum(st.key) ? st.key : '') + '"><div class="crumbs"><button type="button" data-home="1">여정 지도</button><span>/</span><b>' + esc(full(st)) + '</b></div>' +
       '<h1>' + (isNum(st.key) ? '<small>Stage ' + esc(st.key) + '</small>' : '') + esc(st.name) + (st.sub ? ' — ' + esc(st.sub) : '') + '</h1>';
     if (st.goal) h += '<p class="goalline">' + esc(st.goal) + '</p>';
     var ch = [];
@@ -429,7 +463,7 @@ mark{background:rgba(251,191,36,.28);color:inherit;padding:0 2px;border-radius:2
       h += '<div class="sgrid">';
       st.sections.forEach(function(s){
         h += '<button class="ccard' + (read[s.id] ? ' done' : '') + '" type="button" data-sec="' + s.id + '">' +
-             '<div class="no"><span>' + (s.no ? esc(String(s.no)) + '절' : '') + (s.time ? ' · ' + esc(s.time) : '') + '</span>' +
+             '<div class="no"><span>' + (s.no ? '<em>' + esc(String(s.no)) + '</em>' : '') + (s.time ? esc(s.time) : '') + '</span>' +
              (read[s.id] ? '<span class="rd">읽음</span>' : '') + '</div>' +
              '<h4>' + esc(s.title) + '</h4>' + (s.through ? '<p>' + esc(s.through) + '</p>' : '') + '</button>';
       });
@@ -458,11 +492,30 @@ mark{background:rgba(251,191,36,.28);color:inherit;padding:0 2px;border-radius:2
             '<div class="two"><article class="art"><h1>' + esc(sec.title) + '</h1>';
     if (sec.through) h += '<div class="through">' + esc(sec.through) + '</div>';
     var rail = [];
+    if (sec.goals && sec.goals.length) h += '<div class="goals"><b>이 절을 마치면</b><ul>' + sec.goals.map(function(g){ return '<li>' + esc(g) + '</li>'; }).join('') + '</ul></div>';
+    var stepSecs = sec.secs.filter(function(k){ return !kind(k.title); });
+    if (stepSecs.length > 1) {
+      h += '<div class="steps">' + stepSecs.map(function(k, i){
+        return (i ? '<span class="arr">›</span>' : '') + '<a href="#s' + i + '" data-j="s' + i + '"><i>' + (i + 1) + '</i>' + esc(k.title.replace(/^[①②③④⑤⑥⑦⑧⑨⑩\s]+/, '')) + '</a>';
+      }).join('') + '</div>';
+    }
     if (sec.head) h += '<div class="body">' + md(sec.head) + '</div>';
-    sec.secs.forEach(function(k, i){
-      var id = slug(i), cls = kind(k.title);
-      rail.push({ id: id, t: label(k.title), cls: cls });
-      h += cls ? callout(k, id) : '<div class="body"><h2 id="' + id + '">' + esc(k.title) + '</h2>' + md(k.md) + '</div>';
+    var si = 0;
+    // 세부 내용(번호 단계)을 먼저, 그다음 따라 하기 → 확인 → 참고 순으로 고정
+    var order = ['', 'k-zap', 'k-ok', 'k-say', 'k-trap', 'k-deep'];
+    order.forEach(function(want){
+      sec.secs.forEach(function(k){
+        var cls = kind(k.title); if (cls !== want) return;
+        if (!cls) {
+          var id = 's' + si, t = k.title.replace(/^[①②③④⑤⑥⑦⑧⑨⑩\s]+/, '');
+          rail.push({ id: id, t: (si + 1) + '. ' + t });
+          h += '<section class="step" id="' + id + '"><div class="n">' + (si + 1) + '</div><div class="body"><h2>' + esc(t) + '</h2>' + md(k.md) + '</div></section>';
+          si++;
+        } else {
+          var id2 = cls; rail.push({ id: id2, t: label(k.title) });
+          h += callout(k, id2);
+        }
+      });
     });
     h += '<div class="foot">' +
          (pv ? '<button class="btn ghost" type="button" data-sec="' + pv.id + '">← ' + esc(pv.title) + '</button>' : '<button class="btn ghost" type="button" data-k="' + esc(st.key) + '">← 장으로</button>') +
