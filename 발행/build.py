@@ -94,8 +94,8 @@ for folder, key, name, color in STAGES:
         head, secs = split_sections(body)
         sections.append({
             'file': fname,
-            'id': f"s{key.replace('.', '_')}-{fm.get('순서', len(sections) + 1)}",
-            'no': fm.get('순서', ''), 'title': fm.get('제목', os.path.basename(fp)[:-3]),
+            'id': f"s{key.replace('.', '_')}-{len(sections) + 1}",
+            'no': fm.get('순서', ''), 'title': fm.get('제목', os.path.splitext(fname)[0]),
             'through': fm.get('관통', ''), 'time': fm.get('소요', ''),
             'need': fm.get('준비물', []) if isinstance(fm.get('준비물', []), list) else [fm.get('준비물')],
             'head': head, 'secs': secs,
@@ -267,7 +267,12 @@ mark{background:var(--mark);color:inherit;padding:0 2px;border-radius:3px}
     return '';
   }
 
-  var cur = location.hash.replace('#', '') || 'home';
+  // 한글 스테이지 이름은 주소창에서 인코딩돼 돌아온다. 반드시 되돌려 읽는다.
+  function hashKey(){
+    try { return decodeURIComponent(location.hash.slice(1)); }
+    catch (e) { return location.hash.slice(1); }
+  }
+  var cur = hashKey() || 'home';
   var nav = document.getElementById('nav'), main = document.getElementById('main');
 
   function counts(st){
@@ -377,10 +382,11 @@ mark{background:var(--mark);color:inherit;padding:0 2px;border-radius:3px}
       };
     });
     main.querySelectorAll('pre').forEach(function(p){
+      var code = p.innerText;   // 버튼을 붙이기 전에 기억한다. 안 그러면 '복사'가 딸려 간다
       var btn = document.createElement('button');
       btn.className = 'copy'; btn.type = 'button'; btn.textContent = '복사';
       btn.onclick = function(){
-        navigator.clipboard.writeText(p.innerText).then(function(){
+        navigator.clipboard.writeText(code).then(function(){
           btn.textContent = '복사됨'; setTimeout(function(){ btn.textContent = '복사'; }, 1400);
         }, function(){ btn.textContent = '실패'; });
       };
@@ -390,7 +396,7 @@ mark{background:var(--mark);color:inherit;padding:0 2px;border-radius:3px}
 
   function go(k){
     cur = k;
-    if (location.hash.replace('#', '') !== k) location.hash = k;
+    if (hashKey() !== k) location.hash = k;
     drawNav();
     if (k === 'home') { homeView(); }
     else {
@@ -439,7 +445,7 @@ mark{background:var(--mark);color:inherit;padding:0 2px;border-radius:3px}
     t = setTimeout(function(){ search(v); }, 160);
   });
   window.addEventListener('hashchange', function(){
-    var k = location.hash.replace('#', '') || 'home';
+    var k = hashKey() || 'home';
     if (k !== cur) go(k);
   });
   go(cur);
