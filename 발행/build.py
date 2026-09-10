@@ -215,10 +215,13 @@ code,pre,kbd{font-family:var(--mono)}
 .scard .num i{width:8px;height:8px;border-radius:50%;background:var(--sc);display:inline-block}
 .scard h3{margin:2px 0 0;font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.35}
 .scard .goal{font-family:var(--serif);font-size:14.5px;line-height:1.7;color:var(--fg2);margin:0}
-.scard .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px;font-size:12px;color:var(--mute)}
-.scard .bar{height:3px;background:var(--s3);border-radius:99px;overflow:hidden;flex:1;margin-right:12px}
-.scard .bar i{display:block;height:100%;background:var(--sc);width:var(--p,0%)}
-.scard.done h3{color:var(--mute)}
+.scard .foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:12px;font:600 11.5px var(--mono);color:var(--mute)}
+.scard .bar{height:4px;background:var(--s3);border-radius:99px;overflow:hidden;flex:1}
+.scard .bar i{display:block;height:100%;background:var(--sc);width:var(--p,0%);transition:width .3s}
+.scard.done{border-color:color-mix(in srgb,var(--sc) 45%,var(--line))}
+.scard.done h3{color:var(--fg2)}
+.scard.done .num::after{content:"완료";margin-left:auto;color:var(--sc);font-weight:700}
+.scard .num{width:100%}
 .band{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:30px 0 2px;color:var(--fg2);font-size:14px;font-weight:700;letter-spacing:-.01em}
 .band i{width:22px;height:2px;background:var(--bc,var(--line));border-radius:99px;flex:none}
 .band small{font-weight:500;color:var(--faint);font-size:12px}
@@ -254,7 +257,13 @@ code,pre,kbd{font-family:var(--mono)}
 
 /* 절 — 읽는 단위 */
 .two{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:44px;align-items:start}
-@media(max-width:860px){.two{grid-template-columns:1fr}.rail{display:none}}
+@media(max-width:860px){
+  .two{grid-template-columns:1fr}
+  .rail{position:static;order:-1;margin-bottom:22px;padding:14px 16px;background:var(--s1);border:1px solid var(--line);border-radius:12px}
+  .rail a{display:inline-block;border-left:0;border-bottom:1px solid transparent;padding:4px 10px 4px 0;margin-right:4px}
+  .rail a.on{border-left:0;border-bottom-color:var(--c)}
+  .rail .btn{margin-top:12px}
+}
 .art{max-width:var(--w)}
 .art h1{font-size:clamp(24px,3.2vw,30px);font-weight:900;letter-spacing:-.03em;line-height:1.3;margin:0 0 14px;text-wrap:balance}
 .through{font-family:var(--serif);font-size:18.5px;line-height:1.75;color:var(--fg);margin:0 0 20px;padding:18px 20px;
@@ -264,7 +273,8 @@ code,pre,kbd{font-family:var(--mono)}
 .rail a{display:block;color:var(--mute);text-decoration:none;padding:5px 0 5px 12px;border-left:2px solid var(--line);line-height:1.5}
 .rail a:hover,.rail a.on{color:var(--fg);border-left-color:var(--c)}
 .rail .sep{height:14px}
-.rail .btn{width:100%;margin-top:6px}
+.rail .btn{width:100%;margin-top:6px;padding:10px 12px}
+.rail .btn.on{font-weight:700}
 
 .body{font-size:15.5px}
 .body p{margin:1em 0}
@@ -477,11 +487,12 @@ mark{background:rgba(251,191,36,.28);color:inherit;padding:0 2px;border-radius:2
     if (st.head) h += '<div class="intro body">' + md(st.head) + '</div>';
     if (st.sections.length) {
       h += '<div class="sgrid">';
-      st.sections.forEach(function(s){
+      st.sections.forEach(function(s, i){
         h += '<button class="ccard' + (read[s.id] ? ' done' : '') + '" type="button" data-sec="' + s.id + '">' +
-             '<div class="no"><span>' + (s.no ? '<em>' + esc(String(s.no)) + '</em>' : '') + (s.time ? esc(s.time) : '') + '</span>' +
-             (read[s.id] ? '<span class="rd">읽음</span>' : '') + '</div>' +
-             '<h4>' + esc(s.title) + '</h4>' + (s.through ? '<p>' + esc(s.through) + '</p>' : '') + '</button>';
+             '<span class="no">' + (read[s.id] ? '✓' : esc(String(s.no || (i + 1)))) + '</span>' +
+             '<h4>' + esc(s.title) + '</h4>' +
+             (s.through ? '<p>' + esc(s.through) + '</p>' : '') +
+             '<span class="rt">' + (s.time ? esc(s.time) : '') + '</span></button>';
       });
       h += '</div>';
     } else h += '<div class="empty">이 장은 아직 쓰는 중입니다.</div>';
